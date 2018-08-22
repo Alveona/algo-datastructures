@@ -1,0 +1,40 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/Pomavau/C++/data_s/Node.cpp
+cstdio
+-
+Node.h
+/Users/Pomavau/C++/data_s/Node.h
+
+/Users/Pomavau/C++/data_s/Node.h
+
+/Users/Pomavau/C++/data_s/main.cpp
+iostream
+-
+singlylinkedlist.h
+/Users/Pomavau/C++/data_s/singlylinkedlist.h
+vector
+-
+stack
+-
+
+/Users/Pomavau/C++/data_s/singlylinkedlist.cpp
+singlylinkedlist.h
+/Users/Pomavau/C++/data_s/singlylinkedlist.h
+
+/Users/Pomavau/C++/data_s/singlylinkedlist.h
+Node.h
+/Users/Pomavau/C++/data_s/Node.h
+
+/Users/Pomavau/C++/data_s/stack.cpp
+stack.h
+/Users/Pomavau/C++/data_s/stack.h
+
+/Users/Pomavau/C++/data_s/stack.h
+
