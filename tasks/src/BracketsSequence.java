@@ -1,17 +1,29 @@
-import java.lang.reflect.Array;
+
 import java.util.*;
 
 public class BracketsSequence {
 
 
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int code = isStringBracketsFine(sc.nextLine());
-        if(code == 0)
-            System.out.println("Success");
+        int mode = 1;
+        if(mode == 1) {
+            Scanner sc = new Scanner(System.in);
+            int code = isStringBracketsFine(sc.nextLine());
+            if (code == 0)
+                System.out.println("Success");
+            else {
+                System.out.println(code);
+            }
+        }
         else
         {
-            System.out.println(code);
+            int code = isStringBracketsFine("[]([]");
+            if (code == 0)
+                System.out.println("Success");
+            else {
+                System.out.println(code);
+            }
+            runTests();
         }
         /*System.out.println("\nTest done with code " + code);
         runTests();*/
@@ -27,13 +39,17 @@ public class BracketsSequence {
         int currentAnyBracketIndex = 0;
         char topBracket;
         for (Character symbol : charSequence) {
-            if(!validCharacters.contains(symbol))
-                continue;
             currentAnyBracketIndex++;
+            currentOpeningBracketIndex++;
+            if(!validCharacters.contains(symbol)) {
+                //currentOpeningBracketIndex++;
+                continue;
+            }
+            //currentAnyBracketIndex++;
             if (symbol == validOpeningBrackets[0] || symbol == validOpeningBrackets[1] || symbol == validOpeningBrackets[2])
             {
                 bracketsStack.push(symbol);
-                currentOpeningBracketIndex++;
+                //currentOpeningBracketIndex++;
                 numberOfBracketStack.push(currentOpeningBracketIndex);
             }
             else
@@ -54,8 +70,12 @@ public class BracketsSequence {
         if(bracketsStack.isEmpty())
             return 0;
         else
+            //return
             return numberOfBracketStack.peek();
+
+
     }
+
 
     static void runTests()
     {
@@ -63,7 +83,7 @@ public class BracketsSequence {
         assert isStringBracketsFine("()[]}") == 5;
         assert isStringBracketsFine("{{[()]]") == 7;
         assert isStringBracketsFine("{{{[][][]") == 3;
-        assert isStringBracketsFine("{*{{}") == 2;
+        assert isStringBracketsFine("{*{{}") == 3;
         assert isStringBracketsFine("[[*") == 2;
         assert isStringBracketsFine("{*}") == 0;
         assert isStringBracketsFine("{{") == 2;
@@ -72,6 +92,7 @@ public class BracketsSequence {
         assert isStringBracketsFine("}") == 1;
         assert isStringBracketsFine("*{}") == 0;
         assert isStringBracketsFine("{{{**[][][]") == 3;
+        assert isStringBracketsFine("[]([]") == 3;
     }
 
 }
