@@ -1,16 +1,20 @@
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public class BracketsSequence {
 
 
     public static void main(String[] args) {
-        int code = isStringBracketsFine("\"{{{[][][]\"");
-        System.out.println("\nTest done with code " + code);
-        runTests();
+        Scanner sc = new Scanner(System.in);
+        int code = isStringBracketsFine(sc.nextLine());
+        if(code == 0)
+            System.out.println("Success");
+        else
+        {
+            System.out.println(code);
+        }
+        /*System.out.println("\nTest done with code " + code);
+        runTests();*/
     }
 
     static int isStringBracketsFine(String sequence) {
@@ -44,12 +48,13 @@ public class BracketsSequence {
                     return currentAnyBracketIndex;
                 }
             }
-                System.out.println(bracketsStack);
+                //System.out.println(bracketsStack);
+                //System.out.println(numberOfBracketStack);
         }
         if(bracketsStack.isEmpty())
             return 0;
         else
-            return currentOpeningBracketIndex;
+            return numberOfBracketStack.peek();
     }
 
     static void runTests()
@@ -58,7 +63,7 @@ public class BracketsSequence {
         assert isStringBracketsFine("()[]}") == 5;
         assert isStringBracketsFine("{{[()]]") == 7;
         assert isStringBracketsFine("{{{[][][]") == 3;
-        assert isStringBracketsFine("{*{{}") == 3;
+        assert isStringBracketsFine("{*{{}") == 2;
         assert isStringBracketsFine("[[*") == 2;
         assert isStringBracketsFine("{*}") == 0;
         assert isStringBracketsFine("{{") == 2;
