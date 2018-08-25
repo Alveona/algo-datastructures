@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class TreeHeight {
     /*
@@ -11,12 +12,15 @@ public class TreeHeight {
 
     public static void main(String[] args)
     {
-
-        //countTreeHeight(9, new int[]{6, 7, 3, 6, 6, 3, 1, 7, 3});
-        //int finalHeight = countTreeHeight(5, new int[]{4, -1, 4, 1, 1});
-        //int finalHeight = countTreeHeight(5, new int[]{-1, 0, 4, 0, 3});
-        int finalHeight = countTreeHeight(10, new int[]{9, 7, 5, 5, 2, 9, 9, 9, 2, -1});
-        System.out.format("\nFinal height is %d", finalHeight);
+        //runTests();
+        Scanner sc = new Scanner(System.in);
+        int numberOfNodes = sc.nextInt();
+        int[] listOfParents = new int[numberOfNodes];
+        for(int i = 0; i < numberOfNodes; i++)
+        {
+            listOfParents[i] = sc.nextInt();
+        }
+        countTreeHeight(numberOfNodes, listOfParents);
     }
 
     static void runTests()
@@ -29,27 +33,27 @@ public class TreeHeight {
     {
 
         List<ArrayList<Integer>> listOfChildren = transformListOfParentsToListOfChildren(numberOfNodes, listOfParents);
-        return recursiveHeightCounter(rootOfTree, listOfChildren);
+        int height = recursiveHeightCounter(rootOfTree, listOfChildren);
+        System.out.println(height);
+        return height;
     }
     static int recursiveHeightCounter(int rootIndex, List<ArrayList<Integer>> listOfChildren)
     {
         //static int currentRoot = 0; // read note in the beginning of file
         int height = 1;
-        System.out.println("\nIteration:");
+        //System.out.println("\nIteration:");
         for(Integer child : listOfChildren.get(rootIndex))
         {
-            System.out.println(child);
+            //System.out.println(child);
             height = Math.max(height, 1 + recursiveHeightCounter(child, listOfChildren));
-            //recursiveHeightCounter(listOfChildren.get(child), listOfChildren);
         }
-        System.out.format("Height is %d\n", height);
-        //currentRoot++;
+        //System.out.format("Height is %d\n", height);
         return height;
     }
     static List<ArrayList<Integer>> transformListOfParentsToListOfChildren(int numberOfNodes, int [] listOfParents)
     {
         List<ArrayList<Integer>> listOfChildren = new ArrayList<>();
-        System.out.println("List of parents:");
+        /*System.out.println("List of parents:");
         for(int i = 0; i < numberOfNodes; i++)
         {
             System.out.format("%2d ", i);
@@ -58,10 +62,10 @@ public class TreeHeight {
         for(int i = 0; i < numberOfNodes; i++)
         {
             System.out.format("%2d ", listOfParents[i]);
-        }
+        }*/
 
 
-        System.out.println("\nList of children: ");
+        //System.out.println("\nList of children: ");
         for(int i = 0; i < numberOfNodes; i++)
         {
             listOfChildren.add(i, new ArrayList<Integer>());
@@ -70,22 +74,20 @@ public class TreeHeight {
         int rootIndex = 0;
         for(int i = 0; i < numberOfNodes; i++)
         {
-            //if(listOfParents[i] - 1 != i)
             if(listOfParents[i] != -1)
                 listOfChildren.get(listOfParents[i]).add(i);
             else
                 rootIndex = i;
-                //rootIndex = i + 1;
         }
-        System.out.format("Root is %d\n", rootIndex);
+        //System.out.format("Root is %d\n", rootIndex);
         for(int i = 0; i < numberOfNodes; i++)
         {
-            System.out.format("%d - ", i);
+            //System.out.format("%d - ", i);
             for(int j = 0; j < listOfChildren.get(i).size(); j++)
             {
-                System.out.format("%d ", listOfChildren.get(i).get(j));
+                //System.out.format("%d ", listOfChildren.get(i).get(j));
             }
-            System.out.println();
+            //System.out.println();
         }
         rootOfTree = rootIndex;
         return listOfChildren;
