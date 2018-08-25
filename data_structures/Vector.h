@@ -9,14 +9,13 @@ typedef unsigned int uint;
 template<typename T>
 class Vector
 {
-    void extendByAddition(uint constant);
     void extendByMultiplication(float constant);
     T* array = nullptr;
     uint size = 0;
     uint reserved = 0;
     const float extendingConstant = 1.5;
 public:
-    Vector(uint size);
+    explicit Vector(uint size);
     bool empty() const;
     void push_back(T data);
     T& pop_back();
@@ -31,14 +30,14 @@ public:
         return size;
     }
 
-    void setSize(uint size) {
+    /*void setSize(uint size) {
         Vector::size = size;
-    }
+    }*/
 };
 
 template<typename T>
 void Vector<T>::extendByMultiplication(float constant) {
-    T* temp_array = (int*)realloc(array, constant * sizeof(T));
+    T* temp_array = (T*)realloc(array, (size_t)(constant * sizeof(T)));
     if(temp_array == nullptr)
         throw "Realloc failed";
     reserved*=constant;
@@ -48,10 +47,10 @@ void Vector<T>::extendByMultiplication(float constant) {
 template<typename T>
 Vector<T>::Vector(uint size)
 {
-    array = (int*)malloc(size * sizeof(T));
+    array = (T*)malloc(size * sizeof(T));
     if(array == nullptr)
         throw "Malloc failed";
-    reserved = size;
+    reserved = size > 2 ? size : 2;
 }
 
 template <typename T>
@@ -83,4 +82,33 @@ T& Vector<T>::at(uint position) const {
         throw "Index out of bounds exception";
     return array[position];
 }
+
+template<typename T>
+T &Vector<T>::pop_back() {
+    if(size <= 0)
+        throw "Nothing to pop";
+    T data = array[size - 1];
+    size--;
+    return data;
+}
+
+template<typename T>
+void Vector<T>::clear() {
+
+}
+
+template<typename T>
+T &Vector<T>::front() const {
+    if(size <= 0)
+        throw "Nothing to return";
+    return array[0];
+}
+
+template<typename T>
+T &Vector<T>::back() const {
+    if(size <= 0)
+        throw "Nothing to return";
+    return array[size - 1];
+}
+
 #endif //DATA_S_VECTOR_H

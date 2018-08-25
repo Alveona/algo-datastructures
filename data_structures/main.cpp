@@ -34,9 +34,14 @@ void SLL_tests()
 
 void Vector_tests()
 {
-    auto *vector = new Vector<int>(5);
+    auto *vector = new Vector<int>(1);
     vector->push_back(5);
-
-    for(int i = 0; i < vector->getSize(); i++)
-        printf("%d", vector->at(i));
+    vector->push_back(3);
+    vector->push_back(2);
+    //printf("vector size: %d\n", vector->getSize());
+    for(int i = 0; i < 3; i++) {
+        printf("vector size: %d\n", vector->getSize());
+        printf("%d\n", vector->pop_back());
+    }
+        //printf("%d", vector->at(i));
 }
