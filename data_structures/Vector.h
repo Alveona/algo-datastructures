@@ -18,7 +18,7 @@ public:
     explicit Vector(uint size);
     bool empty() const;
     void push_back(T data);
-    T& pop_back();
+    T pop_back();
     void clear();
     void insert(uint position, T data);
     T& at(uint position) const;
@@ -95,6 +95,13 @@ T &Vector<T>::pop_back() {
 template<typename T>
 void Vector<T>::clear() {
 
+}
+
+
+
+template<typename T>
+uint Vector<T>::getSize() const {
+    return size;
 }
 
 template<typename T>
