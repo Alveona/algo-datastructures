@@ -19,7 +19,8 @@ public:
     void push_front(Node<T> *node);
     void push_front(T &data);
     void pop_front();
-    void insert_after(uint index);
+    void insert_after(uint index, Node<T> *node);
+    void insert_after(uint index, T &data;
     void erase(const T &data);
     void erase_after(uint index);
     void clear();
@@ -125,6 +126,16 @@ template<typename T>
 void SinglyLinkedList<T>::setSize(uint size)
 {
     SinglyLinkedList<T>::size = size;
+}
+
+template<typename T>
+bool SinglyLinkedList<T>::empty() const {
+    return size > 0;
+}
+
+template<typename T>
+bool SinglyLinkedList<T>::contains(const T &data) const {
+    return find(data) != nullptr;
 }
 
 #endif //DATA_S_SINGLE_LINKED_LIST_H
