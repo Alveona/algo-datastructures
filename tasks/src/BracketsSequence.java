@@ -3,8 +3,7 @@ import java.util.*;
 
 public class BracketsSequence {
 
-
-    public static void main(String[] args) {
+    public static void _main_(String[] args) {
         int mode = 1;
         if(mode == 1) {
             Scanner sc = new Scanner(System.in);
@@ -25,8 +24,6 @@ public class BracketsSequence {
             }
             runTests();
         }
-        /*System.out.println("\nTest done with code " + code);
-        runTests();*/
     }
 
     static int isStringBracketsFine(String sequence) {
@@ -42,14 +39,11 @@ public class BracketsSequence {
             currentAnyBracketIndex++;
             currentOpeningBracketIndex++;
             if(!validCharacters.contains(symbol)) {
-                //currentOpeningBracketIndex++;
                 continue;
             }
-            //currentAnyBracketIndex++;
             if (symbol == validOpeningBrackets[0] || symbol == validOpeningBrackets[1] || symbol == validOpeningBrackets[2])
             {
                 bracketsStack.push(symbol);
-                //currentOpeningBracketIndex++;
                 numberOfBracketStack.push(currentOpeningBracketIndex);
             }
             else
@@ -64,20 +58,17 @@ public class BracketsSequence {
                     return currentAnyBracketIndex;
                 }
             }
-                //System.out.println(bracketsStack);
-                //System.out.println(numberOfBracketStack);
         }
         if(bracketsStack.isEmpty())
             return 0;
         else
-            //return
             return numberOfBracketStack.peek();
 
 
     }
 
 
-    static void runTests()
+    private static void runTests()
     {
         assert isStringBracketsFine("([](){([])})") == 0;
         assert isStringBracketsFine("()[]}") == 5;
