@@ -3,4 +3,4 @@ project(data_s)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(algo-datastructures main.cpp Stack.h SinglyLinkedList.h Node.h Vector.h)
+add_executable(algo-datastructures main.cpp Stack.h SinglyLinkedList.h Node.h Vector.h RBTree.h RBNode.h)
