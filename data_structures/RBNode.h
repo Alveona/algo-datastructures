@@ -11,61 +11,80 @@ template<typename T>
 class RBNode
 {
     T data;
-    RBNode *next;
-    Color color = BLACK;
+    RBNode *left;
+    RBNode *right;
+    RBNode *parent;
+    Color color = RED;
 public:
-    Color getColor() const;
+    RBNode *getLeft() const;
 
+    void setLeft(RBNode *left);
+
+    RBNode *getRight() const;
+
+    void setRight(RBNode *right);
+
+    RBNode *getParent() const;
+
+    void setParent(RBNode *parent);
+
+    Color getColor() const;
     void setColor(Color color);
 
-public:
     explicit RBNode();
     explicit RBNode(T data);
-    RBNode(T data, RBNode *next);
+    RBNode(T data, RBNode *left, RBNode *right, RBNode *parent);
     RBNode(const RBNode& node);
-    ~Node();
+    ~RBNode();
     RBNode<T>& operator=(const RBNode& node);
     void print() const;
     T getData() const;
     void setData(T data);
-    RBNode *getNext() const;
-    void setNext(RBNode *next);
 };
 
 template<typename T>
 RBNode<T>::RBNode() {
     data = 0;
-    next = nullptr;
+    right = nullptr;
+    left = nullptr;
+    parent = nullptr;
 }
 template<typename T>
 RBNode<T>::RBNode(T data) {
     this->data = data;
-    next = nullptr;
+    right = nullptr;
+    left = nullptr;
+    parent = nullptr;
 }
 template<typename T>
-RBNode<T>::RBNode(T data, RBNode *next) {
+RBNode<T>::RBNode(T data, RBNode *right, RBNode *left, RBNode *parent) {
     this->data = data;
-    this->next = next;
+    this->right = right;
+    this->left = left;
+    this->parent = parent;
 }
 template<typename T>
 RBNode<T>::RBNode(const RBNode &node) {
-    // tbd
+    // TODO
     data = node.data;
     //next = nullptr;
 }
 template<typename T>
 RBNode<T>& RBNode<T>::operator=(const RBNode &node) {
-    // tbd
+    // TODO
     data = node.data;
-    next = nullptr;
+    left = nullptr;
+    right = nullptr;
+    parent = nullptr;
     return *this;
 }
 template<typename T>
-RBNode<T>::~Node() {
-    // tbd
+RBNode<T>::~RBNode() {
+    // TODO
 }
 template<typename T>
 void RBNode<T>::print() const {
+    printf("jfvioafoa");
     if(this != nullptr)
         printf("%d ", data);
 }
@@ -77,17 +96,7 @@ T RBNode<T>::getData() const
 template<typename T>
 void RBNode<T>::setData(T data)
 {
-    RBNode::data = data;
-}
-template<typename T>
-RBNode<T> *RBNode<T>::getNext() const
-{
-    return next;
-}
-template<typename T>
-void RBNode<T>::setNext(RBNode *next)
-{
-    RBNode::next = next;
+    RBNode<T>::data = data;
 }
 
 template<typename T>
@@ -97,7 +106,37 @@ Color RBNode<T>::getColor() const {
 
 template<typename T>
 void RBNode<T>::setColor(Color color) {
-    RBNode::color = color;
+    RBNode<T>::color = color;
+}
+
+template<typename T>
+RBNode<T> *RBNode<T>::getLeft() const {
+    return left;
+}
+
+template<typename T>
+void RBNode<T>::setLeft(RBNode<T> *left) {
+    RBNode<T>::left = left;
+}
+
+template<typename T>
+RBNode<T> *RBNode<T>::getRight() const {
+    return right;
+}
+
+template<typename T>
+void RBNode<T>::setRight(RBNode<T> *right) {
+    RBNode<T>::right = right;
+}
+
+template<typename T>
+RBNode<T> *RBNode<T>::getParent() const {
+    return parent;
+}
+
+template<typename T>
+void RBNode<T>::setParent(RBNode<T> *parent) {
+    RBNode<T>::parent = parent;
 }
 
 #endif //DATA_S_NODE_H

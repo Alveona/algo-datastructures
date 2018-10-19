@@ -1,15 +1,21 @@
 #include <iostream>
-#include "SinglyLinkedList.h"
-#include "Vector.h"
+#include "RBTree.h"
+//#include "SinglyLinkedList.h"
+//#include "Vector.h"
+
+
 using namespace std;
 void SLL_tests();
 void Vector_tests();
+void RBTree_tests();
 int main()
 {
-    Vector_tests();
+    //Vector_tests();
+    RBTree_tests();
     return 0;
 }
 
+/*
 void SLL_tests()
 {
     Node<int> *node1 = new Node<int>(10);
@@ -44,4 +50,13 @@ void Vector_tests()
         printf("%d\n", vector->pop_back());
     }
         //printf("%d", vector->at(i));
+}*/
+
+void RBTree_tests()
+{
+    RBTree<int> *rbTree = new RBTree<int>();
+    rbTree->insert_by_value(12);
+    rbTree->insert_by_value(10);
+    rbTree->insert_by_value(3);
+    rbTree->print_from_min_to_max(rbTree->getRoot());
 }
