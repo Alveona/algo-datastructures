@@ -47,8 +47,9 @@ public:
     void print_from_min_to_max(RBNode<T> *currentroot);
     void print();
     void print_all(std::string spacing, bool isLast, RBNode<T> *node);
-    void rotateRight();
-    void rotateLeft();
+    void rotateRight(RBNode *node);
+    void rotateLeft(RBNode *node);
+
 };
 template<typename T>
 RBTree<T>::RBTree(RBNode<T> *root):root(root) {}
@@ -146,14 +147,36 @@ void RBTree<T>::print_all(std::string spacing, bool isLast, RBNode<T> *node) {
 }
 
 template<typename T>
-void RBTree<T>::rotateRight() {
+void RBTree<T>::rotateRight(RBNode *node) {
 
 
 }
 
 template<typename T>
-void RBTree<T>::rotateLeft() {
+void RBTree<T>::rotateLeft(RBNode *node) {
+    RBNode *wasRight = node->getRight();
+    node->setRight(wasRight->getLeft());
+    if (node->getRight() != nullptr) {
+        RBNode *currentRight = node->getRight();
+        currentRight->setParent(node);
+    }
+    RBNode *parentNode = node->getParent();
+    wasRight->setParent(parentNode);
 
+    if (parentNode == nullptr)
+    {
+        root = wasRight;
+    } else if (node == parentNode->getLeft())
+    {
+        parentNode->setLeft(wasRight);
+    }
+    else
+    {
+        parentNode->setRight(wasRight);
+    }
+
+    wasRight->setLeft(node);
+    node->setParent(wasRight);
 }
 
 
