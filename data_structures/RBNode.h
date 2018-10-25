@@ -84,7 +84,7 @@ RBNode<T>::~RBNode() {
 }
 template<typename T>
 void RBNode<T>::print() const {
-    printf("jfvioafoa");
+    //printf("jfvioafoa");
     if(this != nullptr)
         printf("%d ", data);
 }

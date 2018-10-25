@@ -4,6 +4,7 @@
 //#include "Vector.h"
 
 
+
 using namespace std;
 void SLL_tests();
 void Vector_tests();
@@ -54,9 +55,15 @@ void Vector_tests()
 
 void RBTree_tests()
 {
-    RBTree<int> *rbTree = new RBTree<int>();
+    auto *rootNode = new RBNode<int>(20);
+    auto *rbTree = new RBTree<int>(rootNode);
     rbTree->insert_by_value(12);
+    rbTree->insert_by_value(10);
+    rbTree->insert_by_value(15);
+    rbTree->insert_by_value(25);
     rbTree->insert_by_value(10);
     rbTree->insert_by_value(3);
     rbTree->print_from_min_to_max(rbTree->getRoot());
+    printf("\n\n");
+    rbTree->print();
 }
