@@ -47,9 +47,10 @@ public:
     void print_from_min_to_max(RBNode<T> *currentroot);
     void print();
     void print_all(std::string spacing, bool isLast, RBNode<T> *node);
-    void rotateRight(RBNode *node);
-    void rotateLeft(RBNode *node);
-
+    void rotateRight(RBNode<T> *node);
+    void rotateLeft(RBNode<T> *node);
+    RBNode<T> *find(T value);
+    RBNode<T> *findRecursive(T value, RBNode<T> *currentroot);
 };
 template<typename T>
 RBTree<T>::RBTree(RBNode<T> *root):root(root) {}
@@ -73,6 +74,7 @@ RBNode<T>& RBTree<T>::insert_by_node(RBNode<T> *currentroot, RBNode<T> *node) {
         }
         else {
             currentroot->setRight(node);
+            node->setParent(currentroot);
         }
 
     }
@@ -84,6 +86,7 @@ RBNode<T>& RBTree<T>::insert_by_node(RBNode<T> *currentroot, RBNode<T> *node) {
         }
         else {
             currentroot->setLeft(node);
+            node->setParent(currentroot);
         }
     }
 }
@@ -147,20 +150,45 @@ void RBTree<T>::print_all(std::string spacing, bool isLast, RBNode<T> *node) {
 }
 
 template<typename T>
-void RBTree<T>::rotateRight(RBNode *node) {
+void RBTree<T>::rotateRight(RBNode<T> *node) {
+    RBNode<T> *wasLeft = node->getLeft();
+    if (wasLeft == nullptr)
+        return;
+    node->setLeft(wasLeft->getRight());
+    if (node->getLeft() != nullptr) {
+        RBNode<T> *currentLeft = node->getLeft();
+        currentLeft->setParent(node);
+    }
+    RBNode<T> *parentNode = node->getParent();
+    wasLeft ->setParent(parentNode);
 
+    if (parentNode == nullptr)
+    {
+        root = wasLeft;
+    } else if (node == parentNode->getLeft())
+    {
+        parentNode->setLeft(wasLeft);
+    }
+    else
+    {
+        parentNode->setRight(wasLeft);
+    }
 
+    wasLeft->setRight(node);
+    node->setParent(wasLeft);
 }
 
 template<typename T>
-void RBTree<T>::rotateLeft(RBNode *node) {
-    RBNode *wasRight = node->getRight();
+void RBTree<T>::rotateLeft(RBNode<T> *node) {
+    RBNode<T> *wasRight = node->getRight();
+    if (wasRight == nullptr)
+        return;
     node->setRight(wasRight->getLeft());
     if (node->getRight() != nullptr) {
-        RBNode *currentRight = node->getRight();
+        RBNode<T> *currentRight = node->getRight();
         currentRight->setParent(node);
     }
-    RBNode *parentNode = node->getParent();
+    RBNode<T> *parentNode = node->getParent();
     wasRight->setParent(parentNode);
 
     if (parentNode == nullptr)
@@ -177,6 +205,28 @@ void RBTree<T>::rotateLeft(RBNode *node) {
 
     wasRight->setLeft(node);
     node->setParent(wasRight);
+}
+
+template<typename T>
+RBNode<T> *RBTree<T>::find(T value) {
+    return findRecursive(value, root);
+}
+
+template<typename T>
+RBNode<T> *RBTree<T>::findRecursive(T value, RBNode<T> *currentroot) {
+    if(currentroot->getData() == value) {
+        return currentroot;
+    }
+    if(value > currentroot->getData())
+    {
+        currentroot = currentroot->getRight();
+        return findRecursive(value, currentroot);
+    }
+    if(value < currentroot->getData())
+    {
+        currentroot = currentroot->getLeft();
+        return findRecursive(value, currentroot);
+    }
 }
 
 

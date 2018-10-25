@@ -111,6 +111,8 @@ void RBNode<T>::setColor(Color color) {
 
 template<typename T>
 RBNode<T> *RBNode<T>::getLeft() const {
+    if (this == nullptr)
+        return nullptr;
     return left;
 }
 
@@ -121,6 +123,8 @@ void RBNode<T>::setLeft(RBNode<T> *left) {
 
 template<typename T>
 RBNode<T> *RBNode<T>::getRight() const {
+    if (this == nullptr)
+        return nullptr;
     return right;
 }
 

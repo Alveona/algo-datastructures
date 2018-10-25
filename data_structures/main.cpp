@@ -63,7 +63,20 @@ void RBTree_tests()
     rbTree->insert_by_value(25);
     rbTree->insert_by_value(10);
     rbTree->insert_by_value(3);
+    rbTree->insert_by_value(11);
+    rbTree->insert_by_value(13);
+    rbTree->insert_by_value(17);
+
+    /// PRINT TEST
     rbTree->print_from_min_to_max(rbTree->getRoot());
     printf("\n\n");
+    rbTree->print();
+
+    /// ROTATION TEST
+    RBNode<int> *nodeToFind = rbTree->find(12);
+    rbTree->rotateLeft(nodeToFind);
+    rbTree->print();
+    nodeToFind = rbTree->find(15);
+    rbTree->rotateRight(nodeToFind);
     rbTree->print();
 }
