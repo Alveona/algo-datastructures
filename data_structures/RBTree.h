@@ -8,28 +8,8 @@
 #include "RBNode.h"
 #include <string.h>
 #include <vector>
-
-namespace ColorText {
-    enum Code {
-        FG_RED      = 31,
-        FG_GREEN    = 32,
-        FG_BLUE     = 34,
-        FG_DEFAULT  = 39,
-        BG_RED      = 41,
-        BG_GREEN    = 42,
-        BG_BLUE     = 44,
-        BG_DEFAULT  = 49
-    };
-    class Modifier {
-        Code code;
-    public:
-        Modifier(Code pCode) : code(pCode) {}
-        friend std::ostream&
-        operator<<(std::ostream& os, const Modifier& mod) {
-            return os << "\033[" << mod.code << "m";
-        }
-    };
-}
+#include <stdlib.h>
+#include "rlutil.h"
 
 
 template<typename T>
@@ -42,8 +22,9 @@ public:
     RBNode<T> *getRoot() const;
     RBTree(RBNode<T> *root);
     RBTree();
-    RBNode<T>& insert_by_node(RBNode<T> *currentroot, RBNode<T> *node); // inserting as we would in BST
+    RBNode<T> *insert_by_node(RBNode<T> *currentroot, RBNode<T> *node); // inserting as we would in BST
     void insert_by_value(T data);
+    void fixInsertion(RBNode<T> *node);
     void print_from_min_to_max(RBNode<T> *currentroot);
     void print();
     void print_all(std::string spacing, bool isLast, RBNode<T> *node);
@@ -53,17 +34,20 @@ public:
     RBNode<T> *findRecursive(T value, RBNode<T> *currentroot);
 };
 template<typename T>
-RBTree<T>::RBTree(RBNode<T> *root):root(root) {}
+RBTree<T>::RBTree(RBNode<T> *root):root(root) {
+    root->setColor(BLACK);
+}
 
 template<typename T>
 RBTree<T>::RBTree():root(nullptr) {}
 
 template<typename T>
-RBNode<T>& RBTree<T>::insert_by_node(RBNode<T> *currentroot, RBNode<T> *node) {
+RBNode<T> *RBTree<T>::insert_by_node(RBNode<T> *currentroot, RBNode<T> *node) {
     //printf("adwad\n");
     if(currentroot == nullptr) {
         //root = currentroot; // TODO should do it in normal insertion?
-        return *node;
+        //root = node;
+        return node;
     }
 
     if(node->getData() > currentroot->getData())
@@ -89,6 +73,7 @@ RBNode<T>& RBTree<T>::insert_by_node(RBNode<T> *currentroot, RBNode<T> *node) {
             node->setParent(currentroot);
         }
     }
+    //fixInsertion(node);
 }
 
 template<typename T>
@@ -96,6 +81,7 @@ void RBTree<T>::insert_by_value(T data) {
     //printf("adjoawiod\n");
     RBNode<T> *rbNode = new RBNode<T>(data);
     insert_by_node(root, rbNode);
+    fixInsertion(insert_by_node(root, rbNode));
 }
 
 template<typename T>
@@ -122,22 +108,21 @@ void RBTree<T>::print() {
 template<typename T>
 void RBTree<T>::print_all(std::string spacing, bool isLast, RBNode<T> *node) {
     //printf("%s", spacing);
-    ColorText::Modifier red(ColorText::FG_RED);
-    ColorText::Modifier def(ColorText::FG_DEFAULT);
     std::cout << spacing; //<< def << red;
     if (isLast)
     {
         printf("%s", "└─");
         spacing += "  ";
     }
-    else
+
     {
         printf("%s", "├─");
         spacing += "| ";
     }
-    //printf("%d\n", node->getData());
 
-    std::cout << node->getData() << std::endl; //<< red << std::endl;
+    rlutil::setColor((node->getColor() == RED ? rlutil::RED : rlutil::BLACK));
+    std::cout << node->getData() << std::endl;
+    rlutil::setColor(rlutil::BLACK);
 
     std::vector<RBNode<T>*> children;
     if (node->getLeft() != nullptr)
@@ -226,6 +211,72 @@ RBNode<T> *RBTree<T>::findRecursive(T value, RBNode<T> *currentroot) {
     {
         currentroot = currentroot->getLeft();
         return findRecursive(value, currentroot);
+    }
+}
+
+template<typename T>
+void RBTree<T>::fixInsertion(RBNode<T> *node) {
+    RBNode<T> *parent = nullptr;
+    RBNode<T> *grandparent = nullptr;
+    while (node != root && node->getColor() == RED && node->getParent()->getColor() == RED) {
+        parent = node->getParent();
+        grandparent = parent->getParent();
+        if (parent == grandparent->getLeft())
+        {
+            RBNode<T> *uncle = grandparent->getRight();
+            if (uncle != nullptr && uncle->getColor() == RED)
+            {
+                uncle->setColor(BLACK);
+                parent->setColor(BLACK);
+                grandparent->setColor(RED);
+                node = grandparent;
+            }
+            else if(uncle == nullptr || uncle->getColor() == BLACK)
+            {
+                if (node == parent->getRight()) {
+                    rotateLeft(parent);
+                    node = parent;
+                    parent = node->getParent();
+                }
+                rotateRight(grandparent);
+                if (parent->getColor() == RED) {
+                    parent->setColor(BLACK);
+                    grandparent->setColor(RED);
+                } else {
+                    parent->setColor(RED);
+                    grandparent->setColor(BLACK);
+                }
+                node = parent;
+            }
+        } else
+        {
+            RBNode<T> *uncle = grandparent->getLeft();
+            if (uncle != nullptr && uncle->getColor() == RED)
+            {
+                uncle->setColor(BLACK);
+                parent->setColor(BLACK);
+                grandparent->setColor(RED);
+                node = grandparent;
+            }
+            else if(uncle == nullptr || uncle->getColor() == BLACK)
+            {
+                if (node == parent->getLeft()) {
+                    rotateRight(parent);
+                    node = parent;
+                    parent = node->getParent();
+                }
+                rotateLeft(grandparent);
+                if (parent->getColor() == RED) {
+                    parent->setColor(BLACK);
+                    grandparent->setColor(RED);
+                } else {
+                    parent->setColor(RED);
+                    grandparent->setColor(BLACK);
+                }
+                node = parent;
+            }
+        }
+        root->setColor(BLACK);
     }
 }
 

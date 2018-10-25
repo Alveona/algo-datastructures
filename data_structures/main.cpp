@@ -58,15 +58,25 @@ void RBTree_tests()
     auto *rootNode = new RBNode<int>(20);
     auto *rbTree = new RBTree<int>(rootNode);
     rbTree->insert_by_value(12);
+    rbTree->print();
     rbTree->insert_by_value(10);
+    rbTree->print();
     rbTree->insert_by_value(15);
+    rbTree->print();
     rbTree->insert_by_value(25);
-    rbTree->insert_by_value(10);
+    rbTree->print();
+    //rbTree->insert_by_value(10);
+    //rbTree->print();
     rbTree->insert_by_value(3);
+    rbTree->print();
     rbTree->insert_by_value(11);
+    rbTree->print();
     rbTree->insert_by_value(13);
+    rbTree->print();
     rbTree->insert_by_value(17);
+    rbTree->print();
 
+    /*
     /// PRINT TEST
     rbTree->print_from_min_to_max(rbTree->getRoot());
     printf("\n\n");
@@ -79,4 +89,5 @@ void RBTree_tests()
     nodeToFind = rbTree->find(15);
     rbTree->rotateRight(nodeToFind);
     rbTree->print();
+     */
 }
