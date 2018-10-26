@@ -1,5 +1,5 @@
-#ifndef DATA_S_NODE_H
-#define DATA_S_NODE_H
+#ifndef DATA_S_RBNODE_H
+#define DATA_S_RBNODE_H
 
 #include <cstdio>
 
@@ -143,4 +143,4 @@ void RBNode<T>::setParent(RBNode<T> *parent) {
     RBNode<T>::parent = parent;
 }
 
-#endif //DATA_S_NODE_H
+#endif //DATA_S_RBNODE_H

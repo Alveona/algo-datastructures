@@ -23,6 +23,8 @@ public:
     RBTree(RBNode<T> *root);
     RBTree();
     RBNode<T> *insert_by_node(RBNode<T> *currentroot, RBNode<T> *node); // inserting as we would in BST
+    RBNode<T> *deleteByNodeRecursive(RBNode<T> *currentroot, RBNode<T> *node);
+    RBNode<T> *deleteByNode(RBNode<T> *node);
     void insert_by_value(T data);
     void fixInsertion(RBNode<T> *node);
     void print_from_min_to_max(RBNode<T> *currentroot);
@@ -32,6 +34,7 @@ public:
     void rotateLeft(RBNode<T> *node);
     RBNode<T> *find(T value);
     RBNode<T> *findRecursive(T value, RBNode<T> *currentroot);
+    RBNode<T> *getMinimumInSubtree(RBNode<T> *currentroot);
 };
 template<typename T>
 RBTree<T>::RBTree(RBNode<T> *root):root(root) {
@@ -279,6 +282,85 @@ void RBTree<T>::fixInsertion(RBNode<T> *node) {
         root->setColor(BLACK);
     }
 }
+
+template<typename T>
+RBNode<T> *RBTree<T>::getMinimumInSubtree(RBNode<T> *currentroot) {
+    RBNode<T> *temp = currentroot;
+    while(temp->getLeft() != nullptr)
+        temp = temp->getLeft();
+    return temp;
+}
+
+template<typename T>
+RBNode<T> *RBTree<T>::deleteByNode(RBNode<T> *node) {
+    return deleteByNodeRecursive(root, node);
+}
+
+template<typename T>
+RBNode<T> *RBTree<T>::deleteByNodeRecursive(RBNode<T> *currentroot, RBNode<T> *node) {
+    if (currentroot == nullptr)
+        return nullptr;
+    if (node->getData() < currentroot->getData())
+    {
+        currentroot = currentroot->getLeft();
+        deleteByNodeRecursive(currentroot, node);
+        return nullptr;
+    }
+    if (node->getData() > currentroot->getData())
+    {
+        currentroot = currentroot->getRight();
+        deleteByNodeRecursive(currentroot, node);
+        return nullptr;
+    }
+
+    if(node->getRight() == nullptr && node->getLeft() == nullptr)
+    {
+        if (node == node->getParent()->getLeft())
+            node->getParent()->setLeft(nullptr);
+        if (node == node->getParent()->getRight())
+            node->getParent()->setRight(nullptr);
+        node->setParent(nullptr); // TODO delete node
+
+        return nullptr;
+    }
+    if(node->getRight() != nullptr && node->getLeft() == nullptr)
+    {
+        if(node == node->getParent()->getRight())
+            node->getParent()->setRight(node->getRight());
+        if(node == node->getParent()->getLeft())
+            node->getParent()->setLeft(node->getRight());
+        //node->setData(node->getRight()->getData());
+        //node->setRight(nullptr);
+        //node->getRight()->setParent(nullptr);
+        return nullptr;
+    }
+    if(node->getLeft() != nullptr && node->getRight() == nullptr)
+    {
+        if(node == node->getParent()->getRight())
+            node->getParent()->setRight(node->getLeft());
+        if(node == node->getParent()->getLeft())
+            node->getParent()->setLeft(node->getLeft());
+       // node->setData(node->getLeft()->getData());
+        //node->setLeft(nullptr);
+        //node->getLeft()->setParent(nullptr);
+        return nullptr;
+    }
+    if(node->getRight() != nullptr && node->getLeft() != nullptr)
+    {
+        if (node->getRight()->getLeft() == nullptr) {
+            node->setData(node->getRight()->getData());
+            node->setRight(node->getRight()->getRight());
+
+        } else {
+            RBNode<T> *nodeToDelete = getMinimumInSubtree(currentroot->getRight());
+            //printf("current min: %d\n", nodeToDelete->getData());
+            currentroot->setData(nodeToDelete->getData());
+            return deleteByNodeRecursive(currentroot->getRight(), nodeToDelete);
+        }
+    }
+}
+
+
 
 
 #endif //DATA_S_RBTREE_H

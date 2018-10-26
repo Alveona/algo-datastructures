@@ -1,6 +1,6 @@
 #include <iostream>
 #include "RBTree.h"
-//#include "SinglyLinkedList.h"
+#include "SinglyLinkedList.h"
 //#include "Vector.h"
 
 
@@ -16,7 +16,7 @@ int main()
     return 0;
 }
 
-/*
+
 void SLL_tests()
 {
     Node<int> *node1 = new Node<int>(10);
@@ -38,7 +38,7 @@ void SLL_tests()
     printf("\n");
     singlyLinkedList->getHead()->print();
 }
-
+/*
 void Vector_tests()
 {
     auto *vector = new Vector<int>(1);
@@ -57,22 +57,22 @@ void RBTree_tests()
 {
     auto *rootNode = new RBNode<int>(20);
     auto *rbTree = new RBTree<int>(rootNode);
+
+    /// INSERTION TEST
     rbTree->insert_by_value(12);
-    rbTree->print();
+    //rbTree->print();
     rbTree->insert_by_value(10);
-    rbTree->print();
+    //rbTree->print();
     rbTree->insert_by_value(15);
-    rbTree->print();
+    //rbTree->print();
     rbTree->insert_by_value(25);
-    rbTree->print();
-    //rbTree->insert_by_value(10);
     //rbTree->print();
     rbTree->insert_by_value(3);
-    rbTree->print();
+    //rbTree->print();
     rbTree->insert_by_value(11);
-    rbTree->print();
+    //rbTree->print();
     rbTree->insert_by_value(13);
-    rbTree->print();
+    //rbTree->print();
     rbTree->insert_by_value(17);
     rbTree->print();
 
@@ -90,4 +90,9 @@ void RBTree_tests()
     rbTree->rotateRight(nodeToFind);
     rbTree->print();
      */
+
+    /// DELETE TEST
+    RBNode<int> *nodeToFind = rbTree->find(15);
+    rbTree->deleteByNode(nodeToFind);
+    rbTree->print();
 }
