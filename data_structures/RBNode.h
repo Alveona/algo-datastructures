@@ -5,7 +5,8 @@
 
 enum Color{
     BLACK,
-    RED
+    RED,
+    UNDEFINED,
 };
 template<typename T>
 class RBNode
