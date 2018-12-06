@@ -35,6 +35,8 @@ public:
     void rotateLeft(RBNode<T> *node);
     RBNode<T> *find(T value);
     RBNode<T> *findRecursive(T value, RBNode<T> *currentroot);
+    RBNode<T> *deleteBSTWay(RBNode<T> *currentroot, T value);
+    void deleteValue(T value);
     RBNode<T> *getMinimumInSubtree(RBNode<T> *currentroot);
 };
 template<typename T>
@@ -293,9 +295,38 @@ RBNode<T> *RBTree<T>::getMinimumInSubtree(RBNode<T> *currentroot) {
 }
 
 template<typename T>
+RBNode<T> *RBTree<T>::deleteBSTWay(RBNode<T> *currentroot, T data) {
+    if (currentroot == nullptr)
+        return nullptr;
+    if (data < currentroot->getData())
+    {
+        return deleteBSTWay(currentroot->getLeft(), data);
+    }
+    if (data > currentroot->getData())
+    {
+        return deleteBSTWay(currentroot->getRight(), data);
+    }
+    if (currentroot->getLeft() == nullptr || currentroot->getRight() == nullptr)
+    {
+        return currentroot;
+    }
+
+    RBNode<T> *minimum = getMinimumInSubtree(currentroot->getRight());
+    T minimumData = minimum->getData();
+    currentroot->setData(minimum->getData());
+//    deleteBSTWay(currentroot->getRight(), minimum->getData());
+    return deleteBSTWay(currentroot->getRight(), minimumData);
+}
+template<typename T>
+void RBTree<T>::deleteValue(T value) {
+    RBNode<T> *nodeToDelete = deleteBSTWay(root, value);
+    fixDelete(nodeToDelete);
+//    nodeToDelete->print();
+}
+/*
+template<typename T>
 RBNode<T> *RBTree<T>::deleteByNode(RBNode<T> *node) {
-    /*fixDelete(deleteByNodeRecursive(root, node));
-    return nullptr;*/
+
     if(node->getLeft() == nullptr && node->getRight() == nullptr)
     {
         if (node == root)
@@ -382,7 +413,7 @@ RBNode<T> *RBTree<T>::deleteByNodeRecursive(RBNode<T> *currentroot, RBNode<T> *n
             return deleteByNodeRecursive(currentroot->getRight(), nodeToDelete);
         }
     }
-}
+}*/
 
 template<typename T>
 void RBTree<T>::fixDelete(RBNode<T> *node) {
@@ -394,28 +425,32 @@ void RBTree<T>::fixDelete(RBNode<T> *node) {
         return;
     }
 
-    if (node->getColor() == RED || node->getLeft()->getColor() == RED || node->getRight()->getColor() == RED) {
-        RBNode *child = node->getLeft() != nullptr ? node->getLeft() : node->getRight();
+    if (node->getColor() == RED || node->getLeft()->getColor() == RED || node->getRight()->getColor() == RED)
+    { // TODO fix bugs when left/right is nullptr
+        RBNode<T> *child = node->getLeft() != nullptr ? node->getLeft() : node->getRight();
 
         if (node == node->getParent()->getLeft()) {
             node->getParent()->setLeft(child);
-            if (child != nullptr)
+            if (child != nullptr) {
                 child->setParent(node->getParent());
+                child->setColor(BLACK);
+            }
             //setColor(child, BLACK);
-            child->setColor(BLACK);
             delete (node);
         } else {
             node->getParent()->setRight(child);
-            if (child != nullptr)
+            if (child != nullptr) {
                 child->setParent(node->getParent());
+                child->setColor(BLACK);
+            }
             //setColor(child, BLACK);
-            child->setColor(BLACK);
+
             delete (node);
         }
     } else {
-        RBNode *brother = nullptr;
-        RBNode *parent = nullptr;
-        RBNode *currentnode = node;
+        RBNode<T> *brother = nullptr;
+        RBNode<T> *parent = nullptr;
+        RBNode<T> *currentnode = node;
         //setColor(currentnode, DOUBLE_BLACK);
         currentnode->setColor(UNDEFINED);
         while (currentnode != root && currentnode->getColor() == UNDEFINED) {
@@ -440,54 +475,54 @@ void RBTree<T>::fixDelete(RBNode<T> *node) {
                         currentnode = parent;
                     } else {
                         if (brother->getRight()->getColor() == BLACK) {
-                            setColor(brother->left, BLACK);
-                            setColor(brother, RED);
+                            brother->getLeft()->setColor(BLACK);
+                            brother->setColor(RED);
                             rotateRight(brother);
-                            brother = parent->right;
+                            brother = parent->getRight();
                         }
-                        setColor(brother, parent->color);
-                        setColor(parent, BLACK);
-                        setColor(brother->right, BLACK);
+                        brother->setColor(parent->getColor());
+                        parent->setColor(BLACK);
+                        brother->getRight()->setColor(BLACK);
                         rotateLeft(parent);
                         break;
                     }
                 }
             } else {
-                brother = parent->left;
-                if (getColor(brother) == RED) {
-                    setColor(brother, BLACK);
-                    setColor(parent, RED);
+                brother = parent->getLeft();
+                if (brother->getColor() == RED) {
+                    brother->setColor(RED);
+                    parent->setColor(RED);
                     rotateRight(parent);
                 } else {
-                    if (getColor(brother->left) == BLACK && getColor(brother->right) == BLACK) {
-                        setColor(brother, RED);
-                        if (getColor(parent) == RED)
-                            setColor(parent, BLACK);
+                    if (brother->getLeft()->getColor() == BLACK && brother->getRight()->getColor() == BLACK) {
+                        brother->setColor(RED);
+                        if (parent->getColor() == RED)
+                            parent->setColor(BLACK);
                         else
-                            setColor(parent, DOUBLE_BLACK);
+                            parent->setColor(UNDEFINED);
                         currentnode = parent;
                     } else {
-                        if (getColor(brother->left) == BLACK) {
-                            setColor(brother->right, BLACK);
-                            setColor(brother, RED);
+                        if (brother->getLeft()->getColor() == BLACK) {
+                            brother->getRight()->setColor(BLACK);
+                            brother->setColor(RED);
                             rotateLeft(brother);
-                            brother = parent->left;
+                            brother = parent->getLeft();
                         }
-                        setColor(brother, parent->color);
-                        setColor(parent, BLACK);
-                        setColor(brother->left, BLACK);
+                        brother->setColor(parent->getColor());
+                        parent->setColor(BLACK);
+                        brother->getLeft()->setColor(BLACK);
                         rotateRight(parent);
                         break;
                     }
                 }
             }
         }
-        if (node == node->parent->left)
-            node->parent->left = nullptr;
+        if (node == node->getParent()->getLeft())
+            node->getParent()->setLeft(nullptr);
         else
-            node->parent->right = nullptr;
+            node->getParent()->setRight(nullptr);
         delete(node);
-        setColor(root, BLACK);
+        root->setColor(BLACK);
     }
 }
 

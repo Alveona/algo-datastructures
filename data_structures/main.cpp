@@ -74,11 +74,11 @@ void RBTree_tests()
     rbTree->insert_by_value(13);
     //rbTree->print();
     rbTree->insert_by_value(17);
-    rbTree->print();
+    //rbTree->print();
 
     /*
     /// PRINT TEST
-    rbTree->print_from_min_to_max(rbTree->getRoot());
+    rbTree->printFromMinToMax(rbTree->getRoot());
     printf("\n\n");
     rbTree->print();
 
@@ -93,6 +93,8 @@ void RBTree_tests()
 
     /// DELETE TEST
     RBNode<int> *nodeToFind = rbTree->find(15);
-    rbTree->deleteByNode(nodeToFind);
+    //rbTree->deleteByNode(nodeToFind);
+    rbTree->print();
+    rbTree->deleteValue(15);
     rbTree->print();
 }
