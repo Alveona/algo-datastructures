@@ -15,29 +15,25 @@
 template<typename T>
 class RBTree{
     RBNode<T> *root = nullptr;
-
-
-
-public:
-    RBNode<T> *getRoot() const;
-    RBTree(RBNode<T> *root);
-    RBTree();
-    RBNode<T> *insert_by_node(RBNode<T> *currentroot, RBNode<T> *node); // inserting as we would in BST
-    RBNode<T> *deleteByNodeRecursive(RBNode<T> *currentroot, RBNode<T> *node);
-    RBNode<T> *deleteByNode(RBNode<T> *node);
-    void insert_by_value(T data);
+    RBNode<T> *findRecursive(T value, RBNode<T> *currentroot);
+    RBNode<T> *deleteBSTWay(RBNode<T> *currentroot, T value);
+    RBNode<T> *getMinimumInSubtree(RBNode<T> *currentroot);
+    RBNode<T> *insertByNode(RBNode<T> *currentroot, RBNode<T> *node);
     void fixInsertion(RBNode<T> *node);
     void fixDelete(RBNode<T> *node);
     void printFromMinToMax(RBNode<T> *currentroot);
-    void print();
-    void printAll(std::string spacing, bool isLast, RBNode<T> *node);
     void rotateRight(RBNode<T> *node);
     void rotateLeft(RBNode<T> *node);
+    void printAll(std::string spacing, bool isLast, RBNode<T> *node);
+public:
+    RBTree(RBNode<T> *root);
+    RBTree();
+    RBNode<T> *getRoot() const;
+    void insertByValue(T data);
+    void print();
     RBNode<T> *find(T value);
-    RBNode<T> *findRecursive(T value, RBNode<T> *currentroot);
-    RBNode<T> *deleteBSTWay(RBNode<T> *currentroot, T value);
     void deleteValue(T value);
-    RBNode<T> *getMinimumInSubtree(RBNode<T> *currentroot);
+
 };
 template<typename T>
 RBTree<T>::RBTree(RBNode<T> *root):root(root) {
@@ -48,11 +44,9 @@ template<typename T>
 RBTree<T>::RBTree():root(nullptr) {}
 
 template<typename T>
-RBNode<T> *RBTree<T>::insert_by_node(RBNode<T> *currentroot, RBNode<T> *node) {
+RBNode<T> *RBTree<T>::insertByNode(RBNode<T> *currentroot, RBNode<T> *node) {
     //printf("adwad\n");
     if(currentroot == nullptr) {
-        //root = currentroot; // TODO should do it in normal insertion?
-        //root = node;
         return node;
     }
 
@@ -60,7 +54,7 @@ RBNode<T> *RBTree<T>::insert_by_node(RBNode<T> *currentroot, RBNode<T> *node) {
     {
         if(currentroot->getRight() != nullptr) {
             currentroot = currentroot->getRight();
-            insert_by_node(currentroot, node);
+            insertByNode(currentroot, node);
         }
         else {
             currentroot->setRight(node);
@@ -72,7 +66,7 @@ RBNode<T> *RBTree<T>::insert_by_node(RBNode<T> *currentroot, RBNode<T> *node) {
     {
         if(currentroot->getLeft() != nullptr) {
             currentroot = currentroot->getLeft();
-            insert_by_node(currentroot, node);
+            insertByNode(currentroot, node);
         }
         else {
             currentroot->setLeft(node);
@@ -83,11 +77,11 @@ RBNode<T> *RBTree<T>::insert_by_node(RBNode<T> *currentroot, RBNode<T> *node) {
 }
 
 template<typename T>
-void RBTree<T>::insert_by_value(T data) {
+void RBTree<T>::insertByValue(T data) {
     //printf("adjoawiod\n");
     RBNode<T> *rbNode = new RBNode<T>(data);
-    insert_by_node(root, rbNode);
-    fixInsertion(insert_by_node(root, rbNode));
+    insertByNode(root, rbNode);
+    fixInsertion(insertByNode(root, rbNode));
 }
 
 template<typename T>
@@ -123,6 +117,7 @@ void RBTree<T>::printAll(std::string spacing, bool isLast, RBNode<T> *node) {
 
     {
         printf("%s", "├─");
+//        printf("%s", "└─");
         spacing += "| ";
     }
 
@@ -310,110 +305,17 @@ RBNode<T> *RBTree<T>::deleteBSTWay(RBNode<T> *currentroot, T data) {
     {
         return currentroot;
     }
-
     RBNode<T> *minimum = getMinimumInSubtree(currentroot->getRight());
     T minimumData = minimum->getData();
     currentroot->setData(minimum->getData());
-//    deleteBSTWay(currentroot->getRight(), minimum->getData());
+//    return  deleteBSTWay(currentroot->getRight(), minimum->getData());
     return deleteBSTWay(currentroot->getRight(), minimumData);
 }
 template<typename T>
 void RBTree<T>::deleteValue(T value) {
     RBNode<T> *nodeToDelete = deleteBSTWay(root, value);
     fixDelete(nodeToDelete);
-//    nodeToDelete->print();
 }
-/*
-template<typename T>
-RBNode<T> *RBTree<T>::deleteByNode(RBNode<T> *node) {
-
-    if(node->getLeft() == nullptr && node->getRight() == nullptr)
-    {
-        if (node == root)
-        {
-            root = nullptr;
-        }
-        else
-        {
-            if (node = node->getParent()->getLeft())
-            {
-                node->getParent()->setLeft(nullptr);
-            }
-            else
-            {
-                node->getParent()->setRight(nullptr);
-            }
-        }
-        return nullptr;
-    }
-    RBNode *currentnode = nullptr;
-    RBNode *q = nullptr;
-    //if (node.)
-
-}
-
-template<typename T>
-RBNode<T> *RBTree<T>::deleteByNodeRecursive(RBNode<T> *currentroot, RBNode<T> *node) {
-    if (currentroot == nullptr)
-        return nullptr;
-    if (node->getData() < currentroot->getData())
-    {
-        currentroot = currentroot->getLeft();
-        deleteByNodeRecursive(currentroot, node);
-        return nullptr;
-    }
-    if (node->getData() > currentroot->getData())
-    {
-        currentroot = currentroot->getRight();
-        deleteByNodeRecursive(currentroot, node);
-        return nullptr;
-    }
-    if(node->getRight() == nullptr && node->getLeft() == nullptr)
-    {
-        if (node == node->getParent()->getLeft())
-            node->getParent()->setLeft(nullptr);
-        if (node == node->getParent()->getRight())
-            node->getParent()->setRight(nullptr);
-        node->setParent(nullptr); // TODO delete node
-
-        return nullptr;
-    }
-    if(node->getRight() != nullptr && node->getLeft() == nullptr)
-    {
-        if(node == node->getParent()->getRight())
-            node->getParent()->setRight(node->getRight());
-        if(node == node->getParent()->getLeft())
-            node->getParent()->setLeft(node->getRight());
-        //node->setData(node->getRight()->getData());
-        //node->setRight(nullptr);
-        //node->getRight()->setParent(nullptr);
-        return nullptr;
-    }
-    if(node->getLeft() != nullptr && node->getRight() == nullptr)
-    {
-        if(node == node->getParent()->getRight())
-            node->getParent()->setRight(node->getLeft());
-        if(node == node->getParent()->getLeft())
-            node->getParent()->setLeft(node->getLeft());
-       // node->setData(node->getLeft()->getData());
-        //node->setLeft(nullptr);
-        //node->getLeft()->setParent(nullptr);
-        return nullptr;
-    }
-    if(node->getRight() != nullptr && node->getLeft() != nullptr)
-    {
-        if (node->getRight()->getLeft() == nullptr) {
-            node->setData(node->getRight()->getData());
-            node->setRight(node->getRight()->getRight());
-
-        } else {
-            RBNode<T> *nodeToDelete = getMinimumInSubtree(currentroot->getRight());
-            //printf("current min: %d\n", nodeToDelete->getData());
-            currentroot->setData(nodeToDelete->getData());
-            return deleteByNodeRecursive(currentroot->getRight(), nodeToDelete);
-        }
-    }
-}*/
 
 template<typename T>
 void RBTree<T>::fixDelete(RBNode<T> *node) {
@@ -425,7 +327,8 @@ void RBTree<T>::fixDelete(RBNode<T> *node) {
         return;
     }
 
-    if (node->getColor() == RED || node->getLeft()->getColor() == RED || node->getRight()->getColor() == RED)
+    if (node->getColor() == RED || (node->getLeft() != nullptr && node->getLeft()->getColor() == RED) || (node->getRight() !=
+            nullptr && node->getRight()->getColor() == RED))
     { // TODO fix bugs when left/right is nullptr
         RBNode<T> *child = node->getLeft() != nullptr ? node->getLeft() : node->getRight();
 
@@ -435,43 +338,34 @@ void RBTree<T>::fixDelete(RBNode<T> *node) {
                 child->setParent(node->getParent());
                 child->setColor(BLACK);
             }
-            //setColor(child, BLACK);
-            delete (node);
         } else {
             node->getParent()->setRight(child);
             if (child != nullptr) {
                 child->setParent(node->getParent());
                 child->setColor(BLACK);
             }
-            //setColor(child, BLACK);
 
-            delete (node);
         }
     } else {
         RBNode<T> *brother = nullptr;
         RBNode<T> *parent = nullptr;
         RBNode<T> *currentnode = node;
-        //setColor(currentnode, DOUBLE_BLACK);
-        currentnode->setColor(UNDEFINED);
-        while (currentnode != root && currentnode->getColor() == UNDEFINED) {
-            //parent = currentnode->parent;
+        currentnode->setColor(BLACK_D);
+        while (currentnode != root && currentnode->getColor() == BLACK_D) {
             parent = currentnode->getParent();
             if (currentnode == parent->getLeft()) {
                 brother = parent->getRight();
                 if (brother->getColor() == RED) {
-                    //setColor(brother, BLACK);
                     brother->setColor(BLACK);
-                    //setColor(parent, RED);
                     parent->setColor(RED);
                     rotateLeft(parent);
                 } else {
-                    if (brother->getLeft()->getColor() == BLACK &&brother->getRight()->getColor() == BLACK) {
-                        //setColor(brother, RED);
+                    if (brother->getLeft()->getColor() == BLACK && brother->getRight()->getColor() == BLACK) {
                         brother->setColor(RED);
                         if(parent->getColor() == RED)
                             parent->setColor(BLACK);
                         else
-                            parent->setColor(UNDEFINED);
+                            parent->setColor(BLACK_D);
                         currentnode = parent;
                     } else {
                         if (brother->getRight()->getColor() == BLACK) {
@@ -499,7 +393,7 @@ void RBTree<T>::fixDelete(RBNode<T> *node) {
                         if (parent->getColor() == RED)
                             parent->setColor(BLACK);
                         else
-                            parent->setColor(UNDEFINED);
+                            parent->setColor(BLACK_D);
                         currentnode = parent;
                     } else {
                         if (brother->getLeft()->getColor() == BLACK) {
@@ -521,7 +415,6 @@ void RBTree<T>::fixDelete(RBNode<T> *node) {
             node->getParent()->setLeft(nullptr);
         else
             node->getParent()->setRight(nullptr);
-        delete(node);
         root->setColor(BLACK);
     }
 }

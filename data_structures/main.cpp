@@ -59,22 +59,14 @@ void RBTree_tests()
     auto *rbTree = new RBTree<int>(rootNode);
 
     /// INSERTION TEST
-    rbTree->insert_by_value(12);
-    //rbTree->print();
-    rbTree->insert_by_value(10);
-    //rbTree->print();
-    rbTree->insert_by_value(15);
-    //rbTree->print();
-    rbTree->insert_by_value(25);
-    //rbTree->print();
-    rbTree->insert_by_value(3);
-    //rbTree->print();
-    rbTree->insert_by_value(11);
-    //rbTree->print();
-    rbTree->insert_by_value(13);
-    //rbTree->print();
-    rbTree->insert_by_value(17);
-    //rbTree->print();
+    rbTree->insertByValue(12);
+    rbTree->insertByValue(10);
+    rbTree->insertByValue(15);
+    rbTree->insertByValue(25);
+    rbTree->insertByValue(3);
+    rbTree->insertByValue(11);
+    rbTree->insertByValue(13);
+    rbTree->insertByValue(17);
 
     /*
     /// PRINT TEST
@@ -91,10 +83,12 @@ void RBTree_tests()
     rbTree->print();
      */
 
-    /// DELETE TEST
+    /// FIND TEST
     RBNode<int> *nodeToFind = rbTree->find(15);
     //rbTree->deleteByNode(nodeToFind);
+
+    /// DELETE TEST
     rbTree->print();
-    rbTree->deleteValue(15);
+    rbTree->deleteValue(25);
     rbTree->print();
 }
